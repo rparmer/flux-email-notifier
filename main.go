@@ -23,6 +23,7 @@ func main() {
 	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 		b, err := io.ReadAll(r.Body)
 		if err != nil {
+			fmt.Printf("Unable to read body: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Unable to read body"))
 			return
@@ -30,6 +31,7 @@ func main() {
 
 		e, err := event.FromJson(b)
 		if err != nil {
+			fmt.Printf("Unable to unmarshal event: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Unable to unmarshal event"))
 			return
@@ -37,19 +39,21 @@ func main() {
 
 		json, err := event.ToJsonIndent(e)
 		if err != nil {
+			fmt.Printf("Unable to marshal event: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Unable to marshal event"))
 			return
 		}
 
 		mail := email.New()
-		mail.To = email.Contact(cfg.EmailTo)
-		mail.From = email.Contact(cfg.EmailFrom)
+		mail.To = email.Contact(cfg.To)
+		mail.From = email.Contact(cfg.From)
 		mail.Subject = fmt.Sprintf("Flux Alert - Severity: %s", e.Severity)
 		mail.Message = string(json)
 
 		status, err := mail.Send()
 		if err != nil {
+			fmt.Printf("Unable to send email: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Unable to send email"))
 			return

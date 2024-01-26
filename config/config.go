@@ -8,10 +8,10 @@ import (
 )
 
 type config struct {
-	Server    server
-	Sendgrid  sendgrid
-	EmailFrom contact
-	EmailTo   contact
+	Server   server
+	Sendgrid sendgrid
+	From     contact
+	To       contact
 }
 
 type server struct {
@@ -42,16 +42,15 @@ func init() {
 	// Support for environment variables
 	replacer := strings.NewReplacer(".", "_")
 	v.SetEnvKeyReplacer(replacer)
-	v.SetEnvPrefix("FEN")
 	v.AutomaticEnv()
 
 	// Map environment variables to structs
-	v.BindEnv("sendgrid.key", "SENDGRID_KEY")
-	v.BindEnv("emailFrom.name", "FROM_NAME")
-	v.BindEnv("emailFrom.address", "FROM_ADDRESS")
-	v.BindEnv("emailTo.name", "TO_NAME")
-	v.BindEnv("emailTo.address", "TO_ADDRESS")
-	v.BindEnv("server.port", "SERVER_PORT")
+	v.BindEnv("sendgrid.key", "FEN_SENDGRID_KEY")
+	v.BindEnv("from.name", "FEN_FROM_NAME")
+	v.BindEnv("from.address", "FEN_FROM_ADDRESS")
+	v.BindEnv("to.name", "FEN_TO_NAME")
+	v.BindEnv("to.address", "FEN_TO_ADDRESS")
+	v.BindEnv("server.port", "FEN_SERVER_PORT")
 
 	// Configure default values
 	v.SetDefault("server.port", 3000)

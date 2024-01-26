@@ -1,6 +1,8 @@
 package email
 
 import (
+	"fmt"
+
 	"github.com/rparmer/flux-email-notifier/config"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -32,6 +34,9 @@ func (e *Email) Send() (int, error) {
 	response, err := client.Send(message)
 	if err != nil {
 		return 0, err
+	}
+	if response.Body != "" {
+		fmt.Println(response.Body)
 	}
 	return response.StatusCode, nil
 }
