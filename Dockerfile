@@ -9,7 +9,7 @@ WORKDIR /build/
 COPY . .
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o dist/flux-email-notifier .
 
-FROM --platform=${TARGETPLATFORM} alpine
+FROM alpine
 WORKDIR /app/
 COPY --from=builder /build/dist/flux-email-notifier /app/flux-email-notifier
 RUN adduser --disabled-password --uid 1000 -D fluxuser
