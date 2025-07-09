@@ -8,18 +8,19 @@ import (
 )
 
 type config struct {
-	Server   server
-	Sendgrid sendgrid
-	From     contact
-	To       contact
+	Server  server
+	Mailgun mailgun
+	From    contact
+	To      contact
 }
 
 type server struct {
 	Port int
 }
 
-type sendgrid struct {
-	Key string
+type mailgun struct {
+	Key    string
+	Domain string
 }
 
 type contact struct {
@@ -45,7 +46,8 @@ func init() {
 	v.AutomaticEnv()
 
 	// Map environment variables to structs
-	v.BindEnv("sendgrid.key", "FEN_SENDGRID_KEY")
+	v.BindEnv("mailgun.key", "FEN_MAILGUN_KEY")
+	v.BindEnv("mailgun.domain", "FEN_MAILGUN_DOMAIN")
 	v.BindEnv("from.name", "FEN_FROM_NAME")
 	v.BindEnv("from.address", "FEN_FROM_ADDRESS")
 	v.BindEnv("to.name", "FEN_TO_NAME")

@@ -51,14 +51,13 @@ func main() {
 		mail.Subject = fmt.Sprintf("Flux Alert - Severity: %s", e.Severity)
 		mail.Message = string(json)
 
-		status, err := mail.Send()
-		if err != nil {
+		if err := mail.Send(); err != nil {
 			fmt.Printf("Unable to send email: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("Unable to send email"))
 			return
 		}
-		w.WriteHeader(status)
+		w.WriteHeader(http.StatusOK)
 	})
 
 	port := cfg.Server.Port
